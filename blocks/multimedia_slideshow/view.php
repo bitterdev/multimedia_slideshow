@@ -11,6 +11,9 @@ use HtmlObject\Element;
 defined('C5_EXECUTE') or die('Access denied');
 
 /** @var array $items */
+/** @var string $selector */
+/** @var int $timeout */
+/** @var int $speed */
 
 $c = Page::getCurrentPage();
 $app = Application::getFacadeApplication();
@@ -113,7 +116,7 @@ $slideshowId = "ccm-multimedia-slideshow" . $idHelper->getString();
         (function ($) {
             $(function(){
                 $slideshowContainer = $("#<?php echo $slideshowId; ?>");
-                $slideshowContainer.appendTo(window.document.body);
+                $slideshowContainer.appendTo("<?php echo h($selector); ?>");
 
                 displayNextSlide = function() {
                     var $active = $slideshowContainer.find('.slide.active');
@@ -126,7 +129,7 @@ $slideshowId = "ccm-multimedia-slideshow" . $idHelper->getString();
 
                     $next.css('z-index', 2);
 
-                    $active.fadeOut(1500, function(){
+                    $active.fadeOut(<?php echo (int)$speed; ?>, function(){
                         $active.css('z-index', 1).show().removeClass('active');
                         $next.css('z-index', 3).addClass('active');
                     
@@ -134,11 +137,10 @@ $slideshowId = "ccm-multimedia-slideshow" . $idHelper->getString();
                             $next.get(0).currentTime = 0;
                             $next.get(0).play();
                             $next.get(0).addEventListener('ended', function() {
-                                console.log("ended");
                                 displayNextSlide();
                             }, false);
                         } else {
-                            setTimeout(displayNextSlide, 7000);
+                            setTimeout(displayNextSlide, <?php echo (int)$timeout; ?>);
                         }
                     });
                 };

@@ -7,7 +7,7 @@ use Concrete\Core\Package\Package;
 class Controller extends Package
 {
     protected $pkgHandle = 'multimedia_slideshow';
-    protected $pkgVersion = '1.0.1';
+    protected $pkgVersion = '1.0.2';
     protected $appVersionRequired = '9.0.0';
     
     public function getPackageDescription()

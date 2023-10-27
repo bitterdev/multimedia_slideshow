@@ -2,11 +2,71 @@
 
 defined('C5_EXECUTE') or die('Access denied');
 
+use Concrete\Core\Application\Service\UserInterface;
+use Concrete\Core\Support\Facade\Application;
+use Concrete\Core\Block\View\BlockView;
+use Concrete\Core\Form\Service\Form;
+
+/** @var string $selector */
+/** @var int $timeout */
+/** @var int $speed */
 /** @var array $items */
+/** @var BlockView $view */
+
+$app = Application::getFacadeApplication();
+/** @var UserInterface $userInterface */
+$userInterface = $app->make(UserInterface::class);
+/** @var Form $form */
+$form = $app->make(Form::class);
+
+echo $userInterface->tabs([
+    ['slides', t('Slides'), true],
+    ['options', t('Options')],
+]);
 
 ?>
 
-<div id="items-container"></div>
+<div class="tab-content">
+    <div class="tab-pane active" id="slides" role="tabpanel">
+        <div id="items-container"></div>
+
+        <a href="javascript:void(0);" class="btn btn-primary" id="ccm-add-item">
+            <?php echo t("Add Item"); ?>
+        </a>
+    </div>
+
+    <div class="tab-pane" id="options" role="tabpanel">
+        <div class="form-group">
+            <?php echo $form->label($view->field('selector'), t('CSS Selector')); ?>
+
+            <?php echo $form->text($view->field('selector'), $selector ? $selector : "body"); ?>
+        </div>
+
+        <div class="form-group">
+            <?php echo $form->label($view->field('timeout'), t('Slide Duration')); ?>
+
+            <div class="input-group" style="width: 150px">
+                <?php echo $form->number($view->field('timeout'), $timeout ? $timeout : 7000, ['min' => '1', 'max' => '99999']); ?>
+
+                <span class="input-group-text">
+                    <?php echo t('ms'); ?>
+                </span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <?php echo $form->label($view->field('speed'), t('Slide Transition Speed')); ?>
+
+            <div class="input-group" style="width: 150px">
+                <?php echo $form->number($view->field('speed'), $speed ? $speed : 1500, ['min' => '1', 'max' => '99999']); ?>
+
+                <span class="input-group-text">
+                    <?php echo t('ms'); ?>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script id="item-template" type="text/template">
     <div class="slideshow-item">
@@ -91,10 +151,6 @@ defined('C5_EXECUTE') or die('Access denied');
         </a>
     </div>
 </script>
-
-<a href="javascript:void(0);" class="btn btn-primary" id="ccm-add-item">
-    <?php echo t("Add Item"); ?>
-</a>
 
 <style type="text/css">
     .slideshow-item {

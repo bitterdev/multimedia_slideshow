@@ -9,6 +9,13 @@
             <unsigned/>
             <key/>
         </field>
+        <field name="selector" type="string" size="255"/>
+        <field name="timeout" type="integer">
+        <unsigned/>
+        </field>
+        <field name="speed" type="integer">
+        <unsigned/>
+        </field>
     </table>
 
     <table name="btMultimediaSlideshowItems">
@@ -20,7 +27,7 @@
         <field name="bID" type="integer">
             <unsigned/>
         </field>
-        <field name="mediaType" type="string"  size="255"/>
+        <field name="mediaType" type="string" size="255"/>
         <field name="imagefID" type="integer">
             <unsigned/>
             <default value="0" />

@@ -33,6 +33,9 @@ class Controller extends BlockController
     public function add()
     {
         $this->set("items", []);
+        $this->set("selector", "body");
+        $this->set("timeout", 7000);
+        $this->set("speed", 1500);
     }
 
     public function edit()
@@ -76,6 +79,18 @@ class Controller extends BlockController
     public function validate($args)
     {
         $e = new ErrorList;
+
+        if (!isset($args["selector"]) || empty($args["selector"])) {
+            $e->addError("You need to enter a valid CSS selector.");
+        }
+
+        if (!isset($args["timeout"]) || empty($args["timeout"])) {
+            $e->addError("You need to enter a valid timeout value.");
+        }
+
+        if (!isset($args["speed"]) || empty($args["speed"])) {
+            $e->addError("You need to enter a valid speed value.");
+        }
 
         if (isset($args["items"])) {
             foreach($args["items"] as $item) {
