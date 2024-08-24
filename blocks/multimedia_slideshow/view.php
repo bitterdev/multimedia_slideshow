@@ -41,10 +41,30 @@ $slideshowId = "ccm-multimedia-slideshow" . $idHelper->getString();
                             "mp4fID" => "video/mp4",
                         ];
 
+                        $slideElement = new Element("div");
+                        $slideElement->addClass("slide");
                         $videoElement = new Element("video");
                         $videoElement->setAttribute("muted", "muted");
                         $videoElement->setAttribute("playsinline", "playsinline");
-                        $videoElement->addClass("slide");
+
+                        if (!empty($item["description"])) {
+                            $containerElement = new Element("div");
+                            $containerElement->addClass("container");
+                            $rowElement = new Element("div");
+                            $rowElement->addClass("row");
+                            $colElement = new Element("div");
+                            $colElement->addClass("col");
+                            $imageSliderTextWrapperElement = new Element("div");
+                            $imageSliderTextWrapperElement->addClass("ccm-image-slider-text-wrapper");
+                            $descriptionElement = new Element("div");
+                            $descriptionElement->addClass("description");
+                            $descriptionElement->setValue($item["description"]);
+                            $imageSliderTextWrapperElement->appendChild($descriptionElement);
+                            $colElement->appendChild($imageSliderTextWrapperElement);
+                            $rowElement->appendChild($colElement);
+                            $containerElement->appendChild($rowElement);
+                            $slideElement->appendChild($containerElement);
+                        }
 
                         foreach($mimeTypeMapping as $fieldName => $mimeType) {
                             if (isset($item[$fieldName]) && !empty($item[$fieldName])) {
@@ -63,7 +83,9 @@ $slideshowId = "ccm-multimedia-slideshow" . $idHelper->getString();
                             }
                         }
 
-                        echo $videoElement->render();
+                        $slideElement->appendChild($videoElement);
+
+                        echo $slideElement->render();
                     } else {
                         $fileEntity = File::getByID($item["imagefID"]);
 
@@ -86,7 +108,7 @@ $slideshowId = "ccm-multimedia-slideshow" . $idHelper->getString();
 
     <style type="text/css">
     #<?php echo $slideshowId; ?> {
-        position: fixed;
+        position: absolute;
         top: 0;
         right: 0;
         left: 0;
@@ -115,7 +137,7 @@ $slideshowId = "ccm-multimedia-slideshow" . $idHelper->getString();
     <script>
         (function ($) {
             $(function(){
-                $slideshowContainer = $("#<?php echo $slideshowId; ?>");
+                $slideshowContainer = $("#<?php echo $slideshowId; ?>").addClass("video-slideshow");
                 $slideshowContainer.appendTo("<?php echo h($selector); ?>");
 
                 displayNextSlide = function() {
@@ -133,10 +155,10 @@ $slideshowId = "ccm-multimedia-slideshow" . $idHelper->getString();
                         $active.css('z-index', 1).show().removeClass('active');
                         $next.css('z-index', 3).addClass('active');
                     
-                        if ($next.get(0).tagName === "VIDEO") {
-                            $next.get(0).currentTime = 0;
-                            $next.get(0).play();
-                            $next.get(0).addEventListener('ended', function() {
+                        if ($next.find("video").get(0).tagName === "VIDEO") {
+                            $next.find("video").get(0).currentTime = 0;
+                            $next.find("video").get(0).play();
+                            $next.find("video").get(0).addEventListener('ended', function() {
                                 displayNextSlide();
                             }, false);
                         } else {

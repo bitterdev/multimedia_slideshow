@@ -27,6 +27,7 @@
         <field name="bID" type="integer">
             <unsigned/>
         </field>
+        <field name="description" type="string" size="255"/>
         <field name="mediaType" type="string" size="255"/>
         <field name="imagefID" type="integer">
             <unsigned/>

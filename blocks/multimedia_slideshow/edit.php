@@ -144,6 +144,14 @@ echo $userInterface->tabs([
                     </concrete-file-input>
                 </div>
             </div>
+
+            <div class="form-group">
+                <label for="description-<%=id%>">
+                    <?php echo t("Description"); ?>
+                </label>
+
+                <textarea id="description-<%=id%>" name="items[<%=id%>][description]"><%=description%></textarea>
+            </div>
         </div>
 
         <a href="javascript:void(0);" class="btn btn-danger">
@@ -201,11 +209,18 @@ echo $userInterface->tabs([
             });
 
             $("#items-container").append($item);
+
+            CKEDITOR.replace("description-" + combinedData.id)
         };
 
         for (var item of items) {
             addItem(item);
         }
+
+        $("#ccm-form-submit-button").click(function () {
+            for(var instanceName in CKEDITOR.instances)
+                CKEDITOR.instances[instanceName].updateElement();
+        });
 
         $("#ccm-add-item").click(function (e) {
             e.preventDefault();
@@ -214,7 +229,8 @@ echo $userInterface->tabs([
                 imagefID: null,
                 webmfID: null,
                 oggfID: null,
-                mp4fID: null
+                mp4fID: null,
+                description: null
             });
             return true;
         });

@@ -36,6 +36,7 @@ class Controller extends BlockController
         $this->set("selector", "body");
         $this->set("timeout", 7000);
         $this->set("speed", 1500);
+        $this->requireAsset('ckeditor');
     }
 
     public function edit()
@@ -43,6 +44,7 @@ class Controller extends BlockController
         /** @var Connection $db */
         $db = $this->app->make(Connection::class);
         $this->set("items", $db->fetchAll("SELECT * FROM btMultimediaSlideshowItems WHERE bID = ?", [$this->bID]));
+        $this->requireAsset('ckeditor');
     }
 
     public function delete()
@@ -64,9 +66,10 @@ class Controller extends BlockController
 
         if (is_array($args["items"])) {
             foreach ($args["items"] as $item) {
-                $db->executeQuery("INSERT INTO btMultimediaSlideshowItems (bID, mediaType, imagefID, webmfID, oggfID, mp4fID) VALUES (?, ?, ?, ?, ?, ?)", [
+                $db->executeQuery("INSERT INTO btMultimediaSlideshowItems (bID, mediaType, description, imagefID, webmfID, oggfID, mp4fID) VALUES (?, ?, ?, ?, ?, ?, ?)", [
                     $this->bID,
                     isset($item["mediaType"]) && !empty($item["mediaType"]) ? $item["mediaType"] : "image",
+                    isset($item["description"]) && !empty($item["description"]) ? $item["description"] : "",
                     isset($item["imagefID"]) && !empty($item["imagefID"]) ? $item["imagefID"] : null,
                     isset($item["webmfID"]) && !empty($item["webmfID"]) ? $item["webmfID"] : null,
                     isset($item["oggfID"]) && !empty($item["oggfID"]) ? $item["oggfID"] : null,
@@ -134,7 +137,7 @@ class Controller extends BlockController
         /** @var Connection $db */
         $db = $this->app->make(Connection::class);
 
-        $copyFields = 'mediaType, imagefID, webmfID, oggfID, mp4fID';
+        $copyFields = 'mediaType, imagefID, webmfID, oggfID, mp4fID, description';
         
         $db->executeUpdate("INSERT INTO btMultimediaSlideshowItems (bID, {$copyFields}) SELECT ?, {$copyFields} FROM btMultimediaSlideshowItems WHERE bID = ?", [
                 $newBID,
