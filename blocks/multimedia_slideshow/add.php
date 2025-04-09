@@ -6,4 +6,5 @@ use Concrete\Core\View\View;
 
 /** @var View $this */
 
+/** @noinspection PhpUnhandledExceptionInspection */
 $this->inc("edit.php");

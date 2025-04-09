@@ -6,8 +6,8 @@ use Concrete\Core\Application\Service\UserInterface;
 use Concrete\Core\Support\Facade\Application;
 use Concrete\Core\Block\View\BlockView;
 use Concrete\Core\Form\Service\Form;
+use Concrete\Core\View\View;
 
-/** @var string $selector */
 /** @var int $timeout */
 /** @var int $speed */
 /** @var array $items */
@@ -15,8 +15,10 @@ use Concrete\Core\Form\Service\Form;
 
 $app = Application::getFacadeApplication();
 /** @var UserInterface $userInterface */
+/** @noinspection PhpUnhandledExceptionInspection */
 $userInterface = $app->make(UserInterface::class);
 /** @var Form $form */
+/** @noinspection PhpUnhandledExceptionInspection */
 $form = $app->make(Form::class);
 
 echo $userInterface->tabs([
@@ -24,6 +26,8 @@ echo $userInterface->tabs([
     ['options', t('Options')],
 ]);
 
+/** @noinspection PhpUnhandledExceptionInspection */
+View::element("dashboard/help_blocktypes", [], "simple_tables");
 ?>
 
 <div class="tab-content">
@@ -37,16 +41,10 @@ echo $userInterface->tabs([
 
     <div class="tab-pane" id="options" role="tabpanel">
         <div class="form-group">
-            <?php echo $form->label($view->field('selector'), t('CSS Selector')); ?>
-
-            <?php echo $form->text($view->field('selector'), $selector ? $selector : "body"); ?>
-        </div>
-
-        <div class="form-group">
             <?php echo $form->label($view->field('timeout'), t('Slide Duration')); ?>
 
             <div class="input-group" style="width: 150px">
-                <?php echo $form->number($view->field('timeout'), $timeout ? $timeout : 7000, ['min' => '1', 'max' => '99999']); ?>
+                <?php echo $form->number($view->field('timeout'), $timeout ?: 7000, ['min' => '1', 'max' => '99999']); ?>
 
                 <span class="input-group-text">
                     <?php echo t('ms'); ?>
@@ -76,12 +74,14 @@ echo $userInterface->tabs([
             </label>
 
             <select id="mediaType-<%=id%>" name="items[<%=id%>][mediaType]" class="form-control media-type-selector">
-                <option value="image"<%=(mediaType !== 'video' ? " selected" : "")%>>
-                    <?php echo t("Image"); ?>
+                <option value="image"
+                <%=(mediaType !== 'video' ? " selected" : "")%>>
+                <?php echo t("Image"); ?>
                 </option>
 
-                <option value="video"<%=(mediaType === 'video' ? " selected" : "")%>>
-                    <?php echo t("Video"); ?>
+                <option value="video"
+                <%=(mediaType === 'video' ? " selected" : "")%>>
+                <?php echo t("Video"); ?>
                 </option>
             </select>
         </div>
@@ -93,15 +93,15 @@ echo $userInterface->tabs([
                 </label>
 
                 <div id="imagefID-<%=id%>" data-concrete-file-input="imagefID-<%=id%>" class="file-selector">
-                    <concrete-file-input 
-                        <%=(imagefID !== null ? ":file-id=\"" + imagefID + "\"" : "")%>
-                        choose-text="<?php echo t("Choose File");?>" 
-                        input-name="items[<%=id%>][imagefID]">
+                    <concrete-file-input
+                    <%=(imagefID !== null ? ":file-id=\"" + imagefID + "\"" : "")%>
+                    choose-text="<?php echo t("Choose File"); ?>"
+                    input-name="items[<%=id%>][imagefID]">
                     </concrete-file-input>
                 </div>
             </div>
         </div>
-        
+
         <div class="media-type video <%=(mediaType === 'video' ? "" : " d-none")%>">
             <div class="form-group">
                 <label for="webmfID-<%=id%>">
@@ -109,10 +109,10 @@ echo $userInterface->tabs([
                 </label>
 
                 <div id="webmfID-<%=id%>" data-concrete-file-input="webmfID-<%=id%>" class="file-selector">
-                    <concrete-file-input 
-                        <%=(webmfID !== null ? ":file-id=\"" + webmfID + "\"" : "")%>
-                        choose-text="<?php echo t("Choose File");?>" 
-                        input-name="items[<%=id%>][webmfID]">
+                    <concrete-file-input
+                    <%=(webmfID !== null ? ":file-id=\"" + webmfID + "\"" : "")%>
+                    choose-text="<?php echo t("Choose File"); ?>"
+                    input-name="items[<%=id%>][webmfID]">
                     </concrete-file-input>
                 </div>
             </div>
@@ -123,10 +123,10 @@ echo $userInterface->tabs([
                 </label>
 
                 <div id="oggfID-<%=id%>" data-concrete-file-input="oggfID-<%=id%>" class="file-selector">
-                    <concrete-file-input 
-                        <%=(oggfID !== null ? ":file-id=\"" + oggfID + "\"" : "")%>
-                        choose-text="<?php echo t("Choose File");?>" 
-                        input-name="items[<%=id%>][oggfID]">
+                    <concrete-file-input
+                    <%=(oggfID !== null ? ":file-id=\"" + oggfID + "\"" : "")%>
+                    choose-text="<?php echo t("Choose File"); ?>"
+                    input-name="items[<%=id%>][oggfID]">
                     </concrete-file-input>
                 </div>
             </div>
@@ -137,20 +137,12 @@ echo $userInterface->tabs([
                 </label>
 
                 <div id="mp4fID-<%=id%>" data-concrete-file-input="mp4fID-<%=id%>" class="file-selector">
-                    <concrete-file-input 
-                        <%=(mp4fID !== null ? ":file-id=\"" + mp4fID + "\"" : "")%>
-                        choose-text="<?php echo t("Choose File");?>" 
-                        input-name="items[<%=id%>][mp4fID]">
+                    <concrete-file-input
+                    <%=(mp4fID !== null ? ":file-id=\"" + mp4fID + "\"" : "")%>
+                    choose-text="<?php echo t("Choose File"); ?>"
+                    input-name="items[<%=id%>][mp4fID]">
                     </concrete-file-input>
                 </div>
-            </div>
-
-            <div class="form-group">
-                <label for="description-<%=id%>">
-                    <?php echo t("Description"); ?>
-                </label>
-
-                <textarea id="description-<%=id%>" name="items[<%=id%>][description]"><%=description%></textarea>
             </div>
         </div>
 
@@ -160,7 +152,7 @@ echo $userInterface->tabs([
     </div>
 </script>
 
-<style type="text/css">
+<style>
     .slideshow-item {
         border: 1px solid #dadada;
         background: #f9f9f9;
@@ -169,19 +161,20 @@ echo $userInterface->tabs([
     }
 </style>
 
+<!--suppress JSUnresolvedFunction, JSCheckFunctionSignatures -->
 <script type="text/javascript">
     (function ($) {
-        var nextInsertId = 0;
-        var items = <?php echo json_encode($items);?>;
+        let nextInsertId = 0;
+        let items = <?php echo json_encode($items);?>;
 
-        var addItem = function (data) {
-            var defaults = {
+        let addItem = function (data) {
+            let defaults = {
                 id: nextInsertId
             };
 
-            var combinedData = { ...defaults, ...data };
+            let combinedData = {...defaults, ...data};
 
-            var $item = $(_.template($("#item-template").html())(combinedData));
+            let $item = $(_.template($("#item-template").html())(combinedData));
 
             nextInsertId++;
 
@@ -190,15 +183,15 @@ echo $userInterface->tabs([
             });
 
             Concrete.Vue.activateContext('cms', function (Vue, config) {
-                $item.find(".file-selector").each(function() {
+                $item.find(".file-selector").each(function () {
                     new Vue({
                         el: this,
                         components: config.components
                     });
                 });
             });
-            
-            $item.find(".media-type-selector").change(function() {
+
+            $item.find(".media-type-selector").change(function () {
                 if ($(this).val() === "video") {
                     $(this).parent().parent().find(".media-type.image").addClass("d-none");
                     $(this).parent().parent().find(".media-type.video").removeClass("d-none");
@@ -209,18 +202,11 @@ echo $userInterface->tabs([
             });
 
             $("#items-container").append($item);
-
-            CKEDITOR.replace("description-" + combinedData.id)
         };
 
-        for (var item of items) {
+        for (let item of items) {
             addItem(item);
         }
-
-        $("#ccm-form-submit-button").click(function () {
-            for(var instanceName in CKEDITOR.instances)
-                CKEDITOR.instances[instanceName].updateElement();
-        });
 
         $("#ccm-add-item").click(function (e) {
             e.preventDefault();
@@ -229,8 +215,7 @@ echo $userInterface->tabs([
                 imagefID: null,
                 webmfID: null,
                 oggfID: null,
-                mp4fID: null,
-                description: null
+                mp4fID: null
             });
             return true;
         });
