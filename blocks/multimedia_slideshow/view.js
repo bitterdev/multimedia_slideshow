@@ -36,7 +36,9 @@
 
         let $firstSlide = $slideshowContainer.find('.slide:first');
 
-        $firstSlide.addClass('active').css('z-index', 3);
+        $firstSlide.addClass('active').css({
+            zIndex: 3
+        });
 
         setTimeout(function () {
             displayNextSlide();

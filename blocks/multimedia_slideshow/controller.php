@@ -101,10 +101,6 @@ class Controller extends BlockController
     {
         $e = new ErrorList;
 
-        if (empty($args["selector"])) {
-            $e->addError("You need to enter a valid CSS selector.");
-        }
-
         if (empty($args["timeout"])) {
             $e->addError("You need to enter a valid timeout value.");
         }

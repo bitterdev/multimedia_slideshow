@@ -27,7 +27,7 @@ echo $userInterface->tabs([
 ]);
 
 /** @noinspection PhpUnhandledExceptionInspection */
-View::element("dashboard/help_blocktypes", [], "simple_tables");
+View::element("dashboard/help_blocktypes", [], "multimedia_slideshow");
 ?>
 
 <div class="tab-content">
