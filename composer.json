@@ -1,0 +1,5 @@
+{
+  "name": "bitter/multimedia_slideshow",
+  "type": "concrete5-package",
+  "description": "Create responsive slideshows with images and videos, supporting multiple video formats."
+}
