@@ -1,47 +1,63 @@
-(function ($) {
-    $(function () {
-        let $slideshowContainer = $(".multimedia-slideshow").addClass("video-slideshow");
-        let timerProc = null;
+document.addEventListener('DOMContentLoaded', () => {
+    const slideshow = document.querySelector('.multimedia-slideshow');
+    const slides = Array.from(slideshow.querySelectorAll('.slide'));
+    const timeout = parseInt(slideshow.dataset.timeout, 10) || 3000;
+    const speed = parseInt(slideshow.dataset.speed, 10) || 1500;
 
-        let displayNextSlide = function () {
-            let $active = $slideshowContainer.find('.slide.active');
+    // CSS-Variable setzen
+    slideshow.style.setProperty('--speed', `${speed}ms`);
 
-            if ($active.length === 0) {
-                $active = $slideshowContainer.find('.slide:first');
+    let current = 0;
+    let previousIndex = null;
+
+    const showSlide = (index) => {
+        slides.forEach((slide, i) => {
+            slide.classList.remove('active', 'previous');
+            if (i === index) {
+                slide.classList.add('active');
+            } else if (i === previousIndex) {
+                slide.classList.add('previous');
+            }
+        });
+    };
+
+    const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+    const playLoop = async () => {
+        while (true) {
+            const slide = slides[current];
+            showSlide(current);
+
+            if (slide.classList.contains('video')) {
+                const video = slide.querySelector('video');
+                video.currentTime = 0;
+                await video.play();
+
+                await new Promise(resolve => {
+                    const onEnded = () => {
+                        video.removeEventListener('ended', onEnded);
+                        resolve();
+                    };
+                    video.addEventListener('ended', onEnded);
+                });
+
+                await wait(speed);
+            } else {
+                await wait(timeout + speed);
             }
 
-            let $next = ($active.next().length > 0) ? $active.next() : $slideshowContainer.find('.slide:first');
+            previousIndex = current;
+            current = (current + 1) % slides.length;
+        }
+    };
 
-            $next.css('z-index', 2);
-
-            $active.fadeOut($slideshowContainer.data("speed"), function () {
-                $active.css('z-index', 1).show().removeClass('active');
-                $next.css('z-index', 3).addClass('active');
-
-                if ($next.find("video").length && $next.find("video").get(0).tagName === "VIDEO") {
-                    $next.find("video").get(0).currentTime = 0;
-                    $next.find("video").get(0).play();
-                    $next.find("video").get(0).addEventListener('ended', function () {
-                        displayNextSlide();
-                    }, false);
-                } else {
-                    if (timerProc !== null) {
-                        clearTimeout(timerProc)
-                    }
-
-                    timerProc = setTimeout(displayNextSlide, $slideshowContainer.data("timeout"));
-                }
-            });
-        };
-
-        let $firstSlide = $slideshowContainer.find('.slide:first');
-
-        $firstSlide.addClass('active').css({
-            zIndex: 3
-        });
-
-        setTimeout(function () {
-            displayNextSlide();
-        }, $slideshowContainer.data("timeout"));
+    // Zeige erste Slide sofort und ohne Fade
+    showSlide(current);
+    slides[current].classList.add('initial');
+    requestAnimationFrame(() => {
+        slides[current].classList.remove('initial');
     });
-})(jQuery);
+
+    // Starte Loop
+    playLoop();
+});

@@ -28,6 +28,9 @@ echo $userInterface->tabs([
 
 /** @noinspection PhpUnhandledExceptionInspection */
 View::element("dashboard/help_blocktypes", [], "multimedia_slideshow");
+
+/** @noinspection PhpUnhandledExceptionInspection */
+View::element("dashboard/did_you_know", [], "multimedia_slideshow");
 ?>
 
 <div class="tab-content">

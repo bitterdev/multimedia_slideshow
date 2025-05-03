@@ -37,7 +37,7 @@ $c = Page::getCurrentPage();
                         ];
 
                         $slideElement = new Element("div");
-                        $slideElement->addClass("slide");
+                        $slideElement->addClass("slide video");
                         $videoElement = new Element("video");
                         $videoElement->setAttribute("muted", "muted");
                         $videoElement->setAttribute("playsinline", "playsinline");
@@ -69,10 +69,14 @@ $c = Page::getCurrentPage();
                             $fileVersionEntity = $fileEntity->getApprovedVersion();
 
                             if ($fileVersionEntity instanceof Version) {
+
+                                $slideElement = new Element("div");
+                                $slideElement->addClass("slide image");
                                 $imageElement = new Element("img");
                                 $imageElement->setAttribute("src", $fileVersionEntity->getURL());
-                                $imageElement->addClass("slide");
-                                echo $imageElement->render();
+                                $slideElement->appendChild($imageElement);
+
+                                echo $slideElement->render();
                             }
                         }
                     }
